@@ -1,0 +1,38 @@
+services:
+  registry:
+    image: registry:2
+    container_name: registry
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+    volumes:
+      - ./data/registry:/data
+      - ./auth:/auth
+    networks:
+      - registry-net
+
+  registry-ui:
+    image: joxit/docker-registry-ui:main
+    container_name: registry-ui
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      REGISTRY_TITLE: My Private Registry
+      REGISTRY_URL: http://registry:5000
+      DELETE_IMAGES: "true"
+      SINGLE_REGISTRY: "true"
+      NGINX_PROXY_PASS_URL: http://registry:5000
+    depends_on:
+      - registry
+    networks:
+      - registry-net
+
+networks:
+  registry-net:
+    driver: bridge
