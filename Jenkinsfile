@@ -21,33 +21,33 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            steps {
-            }
-        }
-
         stage('SAST Check') {
             steps {
+                echo 'Performing SAST check...'
             }
         }
 
         stage('OWASP Dependency Check') {
             steps {
+                echo 'Performing OWASP Dependency Check...'
             }
         }
 
         stage('Build Docker Image') {
             steps {
+                echo 'Building Docker image...'
             }
         }
 
         stage('Push to Docker Registry') {
             steps {
+                echo 'Pushing Docker image to registry...'
             }
         }
 
         stage('Deploy') {
             steps {
+                echo 'Deploying application...'
             }
         }
     }
