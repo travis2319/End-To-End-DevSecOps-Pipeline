@@ -2,22 +2,22 @@ pipeline {
     agent any
 
     parameters {
-        // parameters here
+        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Git branch to build')
     }
 
     environment {
-        // environment variables here
+        IMAGE_NAME = 'podinfo'
     }
 
     options {
-        // pipeline options here
+        timestamps()
     }
 
     stages {
 
         stage('SCM Pull') {
             steps {
-                git branch: 'main', url: 'https://github.com/travis2319/podinfo.git', credentialsId: 'travis2319-github'
+                git branch: "${params.BRANCH_NAME}", url: 'https://github.com/travis2319/podinfo.git', credentialsId: 'travis2319-github'
             }
         }
 
