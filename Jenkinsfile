@@ -54,10 +54,13 @@ pipeline {
 
     post {
         always {
+            echo 'Cleaning up...'
         }
         success {
+            echo 'Pipeline completed successfully!'
         }
         failure {
+            echo 'Pipeline failed. Please check the logs for details.'
         }
     }
 }
