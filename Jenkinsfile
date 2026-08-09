@@ -4,7 +4,7 @@ pipeline {
     parameters {
         choice(
             name: 'BRANCH_NAME',
-            choices: ['dev', 'main'],
+            choices: ['dev', 'master'],
             description: 'Git branch to build'
         )
     }
