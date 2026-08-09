@@ -10,7 +10,8 @@ pipeline {
     }
 
     environment {
-        IMAGE_NAME = 'podinfo'
+        SONAR_PROJECT_KEY = 'podinfo'
+        SONAR_HOME = tool 'Sonar'
     }
 
     options {
@@ -27,13 +28,12 @@ pipeline {
 
         stage('SAST - Static Code Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh """
-                        ${tool 'SonarScanner'}/bin/sonar-scanner \
-                        -Dsonar.projectKey=podinfo \
-                        -Dsonar.sources=. \
-                        -Dsonar.host.url=http://sonarqube:9000
-                    """
+                withSonarQubeEnv('sonarqube') {
+                    sh '''
+                        ${SONAR_HOME}/bin/sonar-scanner \
+                        -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                        -Dsonar.sources=.
+                    '''
                 }
             }
         }
