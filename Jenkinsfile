@@ -32,7 +32,6 @@ pipeline {
                         ${tool 'SonarScanner'}/bin/sonar-scanner \
                         -Dsonar.projectKey=podinfo \
                         -Dsonar.sources=. \
-                        -Dsonar.exclusions=vendor/**,charts/**,**/*_test.go \
                         -Dsonar.host.url=http://sonarqube:9000
                     """
                 }
