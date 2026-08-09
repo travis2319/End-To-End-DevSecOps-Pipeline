@@ -1,9 +1,13 @@
 pipeline {
     agent any
 
-    parameters {
-        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Git branch to build')
-    }
+parameters {
+    choice(
+        name: 'BRANCH_NAME',
+        choices: ['dev', 'main'],
+        description: 'Git branch to build'
+    )
+}
 
     environment {
         IMAGE_NAME = 'podinfo'
