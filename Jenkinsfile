@@ -21,9 +21,16 @@ pipeline {
             }
         }
 
-        stage('SAST Check') {
+        stage('SAST - Static Code Analysis') {
             steps {
-                echo 'Performing SAST check...'
+                withSonarQubeEnv('SonarQube') {   // must match the name from step 4
+                    sh """
+                        ${tool 'SonarScanner'}/bin/sonar-scanner \
+                        -Dsonar.projectKey=podinfo \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://sonarqube:9000
+                    """
+                }
             }
         }
 
