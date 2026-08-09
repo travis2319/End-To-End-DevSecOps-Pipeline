@@ -1,13 +1,13 @@
 pipeline {
     agent any
 
-parameters {
-    choice(
-        name: 'BRANCH_NAME',
-        choices: ['dev', 'main'],
-        description: 'Git branch to build'
-    )
-}
+    parameters {
+        choice(
+            name: 'BRANCH_NAME',
+            choices: ['dev', 'main'],
+            description: 'Git branch to build'
+        )
+    }
 
     environment {
         IMAGE_NAME = 'podinfo'
@@ -27,13 +27,22 @@ parameters {
 
         stage('SAST - Static Code Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {   // must match the name from step 4
+                withSonarQubeEnv('SonarQube') {
                     sh """
                         ${tool 'SonarScanner'}/bin/sonar-scanner \
                         -Dsonar.projectKey=podinfo \
                         -Dsonar.sources=. \
+                        -Dsonar.exclusions=vendor/**,charts/**,**/*_test.go \
                         -Dsonar.host.url=http://sonarqube:9000
                     """
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
